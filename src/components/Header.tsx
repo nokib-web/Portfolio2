@@ -235,25 +235,31 @@ const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                     {/* Status + Controls */}
                     <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-400">
                         {/* Live Clock */}
-                        <div className="hidden md:flex items-center space-x-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700/50">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
-                            <span className="text-xs font-mono font-medium">
-                                {mounted && currentTime ? formatTime(currentTime) : "00:00:00"}
-                            </span>
-                        </div>
+                        {mounted && (
+                            <div className="hidden md:flex items-center space-x-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700/50">
+                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+                                <span className="text-xs font-mono font-medium">
+                                    {currentTime ? formatTime(currentTime) : "00:00:00"}
+                                </span>
+                            </div>
+                        )}
 
                         {/* Dark Mode Toggle */}
-                        <motion.button
-                            whileHover={{ rotate: 180 }}
-                            transition={{ duration: 0.3 }}
-                            onClick={toggleDarkMode}
-                            className="hover:text-primary dark:hover:text-primary transition-colors p-1"
-                            aria-label="Toggle dark mode"
-                        >
-                            <span className="material-icons-outlined text-xl">
-                                {mounted && isDarkMode ? 'dark_mode' : 'light_mode'}
-                            </span>
-                        </motion.button>
+                        {mounted ? (
+                            <motion.button
+                                whileHover={{ rotate: 180 }}
+                                transition={{ duration: 0.3 }}
+                                onClick={toggleDarkMode}
+                                className="hover:text-primary dark:hover:text-primary transition-colors p-1"
+                                aria-label="Toggle dark mode"
+                            >
+                                <span className="material-icons-outlined text-xl">
+                                    {isDarkMode ? 'dark_mode' : 'light_mode'}
+                                </span>
+                            </motion.button>
+                        ) : (
+                            <div className="p-1 w-6 h-6"></div>
+                        )}
                         <motion.a
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
