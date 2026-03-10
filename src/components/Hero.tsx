@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaReact, FaGithub, FaNodeJs } from 'react-icons/fa';
@@ -5,9 +7,9 @@ import { SiMongodb, SiTailwindcss, SiNextdotjs } from 'react-icons/si';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
-const Hero = () => {
-    const containerRef = useRef(null);
-    const iconsRef = useRef([]);
+const Hero: React.FC = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const iconsRef = useRef<HTMLDivElement[]>([]);
 
     useGSAP(() => {
         iconsRef.current.forEach((icon, index) => {
@@ -24,7 +26,7 @@ const Hero = () => {
         });
     }, { scope: containerRef });
 
-    const addToRefs = (el) => {
+    const addToRefs = (el: HTMLDivElement | null) => {
         if (el && !iconsRef.current.includes(el)) {
             iconsRef.current.push(el);
         }

@@ -1,21 +1,20 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaWhatsapp } from "react-icons/fa";
 import { MdEmail, MdLocationOn } from "react-icons/md";
 import Swal from "sweetalert2";
 
-const Contact = () => {
-
-
-
-    const handleSubmit = (e) => {
+const Contact: React.FC = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // get form data
-        const form = e.target.closest('form');
-        const name = form.name.value;
-        const email = form.email.value;
-        const message = form.message.value;
+        const form = e.currentTarget;
+        const name = (form.elements.namedItem('name') as HTMLInputElement).value;
+        const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+        const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value;
 
         // Basic validation
         if (!name || !email || !message) {
@@ -110,24 +109,23 @@ const Contact = () => {
                     </div>
                 </div>
 
-                <form className="bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-sm space-y-6">
+                <form className="bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-sm space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Name</label>
-                        <input type="text" id="name" className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="Your Name" />
+                        <input type="text" id="name" name="name" className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="Your Name" />
                     </div>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
-                        <input type="email" id="email" className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="your@email.com" />
+                        <input type="email" id="email" name="email" className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="your@email.com" />
                     </div>
                     <div>
                         <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Message</label>
-                        <textarea id="message" rows="4" className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="How can I help you?"></textarea>
+                        <textarea id="message" name="message" rows={4} className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary-500 focus:ring-primary-500 transition-all p-3" placeholder="How can I help you?"></textarea>
                     </div>
                     <motion.button
                         whileTap={{ scale: 0.98 }}
                         whileHover={{ scale: 1.02 }}
                         type="submit"
-                        onClick={handleSubmit}
                         className="w-full bg-primary-600 text-white py-3 px-6 rounded-xl hover:bg-primary-700 transition-all font-semibold shadow-lg shadow-primary-600/20"
                     >
                         Send Message

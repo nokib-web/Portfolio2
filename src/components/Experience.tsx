@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Experience = () => {
+const Experience: React.FC = () => {
     const experiences = [
         {
             role: "Full-Stack Developer (Trainee)",

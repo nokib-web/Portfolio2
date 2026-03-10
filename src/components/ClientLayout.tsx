@@ -1,8 +1,14 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-const Layout = ({ children }) => {
+interface ClientLayoutProps {
+    children: React.ReactNode;
+}
+
+const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
     const [activeSection, setActiveSection] = useState('hero');
 
     useEffect(() => {
@@ -12,7 +18,7 @@ const Layout = ({ children }) => {
                 if (entry.isIntersecting) {
                     setActiveSection(entry.target.id);
                     // Update URL hash without jumping
-                    window.history.replaceState(null, null, `#${entry.target.id}`);
+                    window.history.replaceState(null, '', `#${entry.target.id}`);
                 }
             });
         }, { threshold: [0, 0.2, 0.5], rootMargin: "-40% 0px -55% 0px" });
@@ -41,4 +47,4 @@ const Layout = ({ children }) => {
     );
 };
 
-export default Layout;
+export default ClientLayout;

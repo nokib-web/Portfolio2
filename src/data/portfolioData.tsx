@@ -1,7 +1,28 @@
 import { FaReact, FaHtml5, FaCss3Alt, FaJs, FaPython, FaGitAlt, FaDocker, FaAws, FaFigma } from 'react-icons/fa';
 import { SiNextdotjs, SiTailwindcss, SiTypescript, SiNodedotjs, SiExpress, SiMongodb, SiPostgresql } from 'react-icons/si';
+import { ReactNode } from 'react';
 
-export const projects = [
+export interface Project {
+    title: string;
+    description: string;
+    tech: string[];
+    image: string;
+    codeLink: string;
+    liveLink: string;
+    keyPoints: string[];
+}
+
+export interface SkillItem {
+    name: string;
+    icon: ReactNode | null;
+}
+
+export interface SkillCategory {
+    category: string;
+    items: SkillItem[];
+}
+
+export const projects: Project[] = [
     {
         title: "Portfolio Website",
         description: "A responsive and interactive personal portfolio website built with modern web technologies. Features a clean design, dark mode support, and smooth user experience.",
@@ -74,7 +95,7 @@ export const projects = [
     }
 ];
 
-export const skills = [
+export const skills: SkillCategory[] = [
     {
         category: "Frontend",
         items: [

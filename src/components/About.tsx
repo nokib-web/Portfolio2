@@ -1,9 +1,8 @@
 import React from 'react';
 
-const About = () => {
+const About: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto">
-
             <div className="flex items-center gap-3 mb-8">
                 <span className="p-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
                     <span className="material-icons-outlined">person</span>
@@ -14,7 +13,6 @@ const About = () => {
             </div>
 
             <div className="flex flex-col lg:flex-row gap-12">
-
                 <div className="lg:w-1/3">
                     <img
                         alt="Nokib Profile"
@@ -29,7 +27,6 @@ const About = () => {
                     </h2>
 
                     <div className="space-y-6 text-slate-600 dark:text-slate-400 leading-relaxed text-lg font-body">
-
                         <p>
                             I’m Nazmul Hasan Nokib — a Full-Stack Web Developer driven by a deep fascination for how ideas
                             transform into interactive digital experiences. My journey started with a tiny
@@ -61,7 +58,6 @@ const About = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     <div className="bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 p-8 rounded-2xl flex items-start space-x-4 shadow-sm hover:shadow-md transition-all">
-
                         <div className="bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 p-3 rounded-xl">
                             <span className="material-icons-outlined">edit_note</span>
                         </div>
@@ -71,8 +67,6 @@ const About = () => {
                                 Exploring ideas through books and expressing thoughts through writing.
                             </p>
                         </div>
-
-
                     </div>
 
                     <div className="bg-white dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 p-8 rounded-2xl flex items-start space-x-4 shadow-sm hover:shadow-md transition-all">
@@ -102,9 +96,6 @@ const About = () => {
                 </div>
             </div>
         </div>
-
-
-
     );
 };
 

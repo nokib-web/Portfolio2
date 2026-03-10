@@ -1,13 +1,12 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Footer = () => {
+const Footer: React.FC = () => {
     return (
         <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 py-6 mt-auto">
             <div className="container mx-auto px-6 flex flex-col md:flex-row-reverse items-center justify-between gap-4">
-                
-                {/* Text */}
-                
 
                 {/* Social Icons */}
                 <div className="flex items-center justify-center space-x-6">
@@ -40,7 +39,7 @@ const Footer = () => {
                     </motion.a>
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400 text-center md:text-left">
-                    &copy; {new Date().getFullYear()} Nokib. All rights reserved.
+                    &copy; <span suppressHydrationWarning>{new Date().getFullYear()}</span> Nokib. All rights reserved.
                 </div>
             </div>
         </footer>
@@ -48,4 +47,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

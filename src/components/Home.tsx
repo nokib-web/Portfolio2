@@ -9,7 +9,7 @@ import Contact from './Contact';
 import Stats from './Stats';
 import Footer from './Footer';
 
-const Home = () => {
+const Home: React.FC = () => {
     return (
         <div className="flex flex-col space-y-20 md:space-y-32">
             <section id="hero" className="scroll-mt-20">

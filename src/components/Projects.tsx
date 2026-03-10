@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ProjectModal from './ProjectModal';
-import { projects } from '../data/portfolioData';
+import { projects, Project } from '../data/portfolioData';
 
-const Projects = () => {
-    const [selectedProject, setSelectedProject] = useState(null);
+const Projects: React.FC = () => {
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     return (
         <div className="max-w-6xl mx-auto">

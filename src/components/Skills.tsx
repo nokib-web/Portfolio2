@@ -1,10 +1,10 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
-
 import { skills } from '../data/portfolioData';
 
-const Skills = () => {
-
+const Skills: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <motion.h2

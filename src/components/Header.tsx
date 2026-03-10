@@ -1,25 +1,67 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FaGithub } from "react-icons/fa";
 import { motion } from 'framer-motion';
 import MobileMenu from './MobileMenu';
 import { projects, skills } from '../data/portfolioData';
+import Link from 'next/link';
 
-const Header = ({ activeSection }) => {
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        return savedTheme === 'dark' || (!savedTheme && prefersDark);
-    });
+interface HeaderProps {
+    activeSection: string;
+}
 
-    const [currentTime, setCurrentTime] = useState(new Date());
+interface SearchResult {
+    type: string;
+    title: string;
+    link: string;
+    icon: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ activeSection }) => {
+    // Theme state
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+    // Mount state for hydration safe rendering
+    const [mounted, setMounted] = useState(false);
+
+    // Time state - init as null to avoid hydration mismatch
+    const [currentTime, setCurrentTime] = useState<Date | null>(null);
+
+    // Search state
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [showResults, setShowResults] = useState(false);
-    const searchInputRef = useRef(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
-    // Apply theme to DOM when isDarkMode changes
+    // Initialization Effect
     useEffect(() => {
+        setMounted(true);
+
+        // Theme initialization
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            setIsDarkMode(true);
+            document.documentElement.classList.add('dark');
+        } else {
+            setIsDarkMode(false);
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Clock initialization
+        setCurrentTime(new Date());
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    // Effect for handling theme changes after mount
+    useEffect(() => {
+        if (!mounted) return;
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
@@ -27,7 +69,7 @@ const Header = ({ activeSection }) => {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         }
-    }, [isDarkMode]);
+    }, [isDarkMode, mounted]);
 
     // Search Logic
     useEffect(() => {
@@ -37,7 +79,7 @@ const Header = ({ activeSection }) => {
         }
 
         const query = searchQuery.toLowerCase();
-        const results = [];
+        const results: SearchResult[] = [];
 
         // Search Projects
         projects.forEach(project => {
@@ -59,11 +101,9 @@ const Header = ({ activeSection }) => {
             });
         });
 
-        // Search Sections (including "Stats" which is section #stats)
+        // Search Sections
         ['Home', 'About', 'Experience', 'Education', 'Projects', 'Skills', 'Contact', 'Stats'].forEach(section => {
             if (section.toLowerCase().includes(query)) {
-                // Skills is #skills (plural), others are singular usually or logic handled by section ID
-                // In Layout.jsx/Home.jsx: ids are: hero, about, skills, experience, projects, education, contact, stats
                 let link = `#${section.toLowerCase()}`;
                 if (section === 'Home') link = '#hero';
                 if (section === 'Skills') link = '#skills';
@@ -84,30 +124,11 @@ const Header = ({ activeSection }) => {
 
     // Toggle Dark Mode
     const toggleDarkMode = () => {
-        setIsDarkMode(prev => {
-            const newMode = !prev;
-            if (newMode) {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-            return newMode;
-        });
+        setIsDarkMode(prev => !prev);
     };
 
-    // Live Clock Update
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
     // Format time as HH:MM:SS
-    const formatTime = (date) => {
+    const formatTime = (date: Date) => {
         return date.toLocaleTimeString('en-GB', {
             hour: '2-digit',
             minute: '2-digit',
@@ -117,7 +138,7 @@ const Header = ({ activeSection }) => {
 
     // Focus search with ⌘K or Ctrl+K
     useEffect(() => {
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
                 searchInputRef.current?.focus();
@@ -133,7 +154,7 @@ const Header = ({ activeSection }) => {
             <div className="container mx-auto px-6 h-16 flex items-center justify-between">
                 {/* Logo & Nav */}
                 <div className="flex items-center space-x-8">
-                    <a href="#hero">
+                    <Link href="#hero">
                         <motion.div
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -142,16 +163,16 @@ const Header = ({ activeSection }) => {
                             <span className="material-icons-outlined text-primary-500">north_east</span>
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300">nokib.dev</span>
                         </motion.div>
-                    </a>
+                    </Link>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center space-x-1">
-                        <a className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeSection === 'hero'
+                        <Link className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeSection === 'hero'
                             ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
                             : "text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                             }`} href="#hero">
                             Home
-                        </a>
+                        </Link>
                         <motion.a
                             whileHover={{ y: -2 }}
                             className="px-4 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center gap-1"
@@ -192,7 +213,7 @@ const Header = ({ activeSection }) => {
                         {showResults && searchResults.length > 0 && (
                             <div className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50">
                                 {searchResults.slice(0, 6).map((result, index) => (
-                                    <a
+                                    <Link
                                         key={index}
                                         href={result.link}
                                         onClick={handleResultClick}
@@ -205,7 +226,7 @@ const Header = ({ activeSection }) => {
                                             <h4 className="text-sm font-medium text-slate-900 dark:text-white">{result.title}</h4>
                                             <span className="text-xs text-slate-500 dark:text-slate-400">{result.type}</span>
                                         </div>
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         )}
@@ -216,7 +237,9 @@ const Header = ({ activeSection }) => {
                         {/* Live Clock */}
                         <div className="hidden md:flex items-center space-x-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700/50">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
-                            <span className="text-xs font-mono font-medium">{formatTime(currentTime)}</span>
+                            <span className="text-xs font-mono font-medium">
+                                {mounted && currentTime ? formatTime(currentTime) : "00:00:00"}
+                            </span>
                         </div>
 
                         {/* Dark Mode Toggle */}
@@ -228,7 +251,7 @@ const Header = ({ activeSection }) => {
                             aria-label="Toggle dark mode"
                         >
                             <span className="material-icons-outlined text-xl">
-                                {isDarkMode ? 'dark_mode' : 'light_mode'}
+                                {mounted && isDarkMode ? 'dark_mode' : 'light_mode'}
                             </span>
                         </motion.button>
                         <motion.a

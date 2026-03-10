@@ -1,9 +1,24 @@
-import React from 'react';
-import { createPortal } from 'react-dom';
-import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+'use client';
 
-const MobileMenu = ({ isOpen, onClose, activeSection }) => {
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+
+interface MobileMenuProps {
+    isOpen: boolean;
+    onClose: () => void;
+    activeSection: string;
+}
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection }) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
     const navItems = [
         { name: "Introduction", path: "#hero", id: "hero", icon: "home" },
         { name: "About Me", path: "#about", id: "about", icon: "person" },
@@ -14,6 +29,8 @@ const MobileMenu = ({ isOpen, onClose, activeSection }) => {
         { name: "Contact", path: "#contact", id: "contact", icon: "mail" },
         { name: "Stats", path: "#stats", id: "stats", icon: "insights" },
     ];
+
+    if (!mounted) return null;
 
     return createPortal(
         <AnimatePresence>
@@ -51,7 +68,7 @@ const MobileMenu = ({ isOpen, onClose, activeSection }) => {
                         {/* Menu Items */}
                         <div className="flex-1 overflow-y-auto py-8 px-6 space-y-2">
                             {navItems.map((item) => (
-                                <a
+                                <Link
                                     key={item.name}
                                     href={item.path}
                                     onClick={onClose}
@@ -62,7 +79,7 @@ const MobileMenu = ({ isOpen, onClose, activeSection }) => {
                                 >
                                     <span className="material-icons-outlined mr-4 opacity-70">{item.icon}</span>
                                     {item.name}
-                                </a>
+                                </Link>
                             ))}
                         </div>
 

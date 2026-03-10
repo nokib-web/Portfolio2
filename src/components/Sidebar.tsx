@@ -1,7 +1,11 @@
+import Link from 'next/link';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
-const Sidebar = ({ activeSection }) => {
+interface SidebarProps {
+    activeSection: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
     const navItems = [
         { name: "Introduction", path: "#hero", id: "hero", icon: "home" },
         { name: "About Me", path: "#about", id: "about", icon: "person" },
@@ -15,10 +19,10 @@ const Sidebar = ({ activeSection }) => {
 
     return (
         <aside className="w-64 hidden md:block pl-6 py-6 sticky top-20 h-[calc(100vh-80px)]">
-            <div className="h-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-glass border border-white/20 dark:border-slate-800/50 rounded-2xl shadow-glass p-6">
+            <div className="h-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-glass border border-white/20 dark:border-slate-800/50 rounded-2xl shadow-glass p-6 overflow-y-auto">
                 <nav className="space-y-2">
                     {navItems.map((item) => (
-                        <a
+                        <Link
                             key={item.name}
                             href={item.path}
                             className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 group relative overflow-hidden ${activeSection === item.id
@@ -28,7 +32,7 @@ const Sidebar = ({ activeSection }) => {
                         >
                             <span className={`material-icons-outlined text-xl mr-3 ${activeSection === item.id ? "text-white" : "text-slate-400 group-hover:text-primary-500"}`}>{item.icon}</span>
                             <span className="relative z-10">{item.name}</span>
-                        </a>
+                        </Link>
                     ))}
                 </nav>
             </div>

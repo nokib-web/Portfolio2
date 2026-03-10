@@ -1,9 +1,22 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-
 import { createPortal } from 'react-dom';
+import { Project } from '../data/portfolioData';
 
-const ProjectModal = ({ project, onClose }) => {
+interface ProjectModalProps {
+    project: Project | null;
+    onClose: () => void;
+}
+
+const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
     useEffect(() => {
         if (project) {
@@ -20,7 +33,7 @@ const ProjectModal = ({ project, onClose }) => {
         setTimeout(onClose, 300); // Wait for transition
     };
 
-    if (!project) return null;
+    if (!mounted || !project) return null;
 
     return createPortal(
         <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
